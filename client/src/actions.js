@@ -6,3 +6,10 @@ export function sendText(id, text) {
         payload: { id, text }
     };
 }
+
+export function exit(id, text) {
+    return {
+        type: at.EXIT,
+        payload: { id, text }
+    };
+}

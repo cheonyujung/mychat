@@ -7,14 +7,24 @@ const defaultState = {
 export default function(state = defaultState, action) {
     switch(action.type) {
         case at.SEND_TEXT:
-            console.log(action);
             return {
                 bodies: [
                     ...state.bodies, {
                     id: action.payload.id,
                     text: action.payload.text,
+                    action: action.type,
                 }]
             };
+        case at.EXIT:
+            return {
+                bodies: [
+                    ...state.bodies, {
+                    id: action.payload.id,
+                    text: action.payload.id + "님이 종료하였습니다",
+                    action: action.type,
+                }]
+            };
+
         default:
             return state;
     }
