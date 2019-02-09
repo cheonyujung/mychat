@@ -8,8 +8,8 @@ import {sendText} from '../actions';
 class ChatContainer extends React.Component {
     handleSendText(e) {
         e.preventDefault();
-        console.log(e.target.text.value);
         this.props.dispatch(sendText("JCooky", e.target.text.value));
+        e.target.text.value = "";
     }
 
     render() {
