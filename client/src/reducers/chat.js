@@ -4,7 +4,12 @@ const defaultState = {
     bodies: []
 };
 
+let isExit = false;
 export default function(state = defaultState, action) {
+    if (isExit) {
+        return state;
+    }
+
     switch(action.type) {
         case at.SEND_TEXT:
             return {
@@ -16,6 +21,7 @@ export default function(state = defaultState, action) {
                 }]
             };
         case at.EXIT:
+            isExit = true;
             return {
                 bodies: [
                     ...state.bodies, {
