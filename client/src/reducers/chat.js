@@ -12,6 +12,7 @@ export default function(state = defaultState, action) {
 
     switch(action.type) {
         case at.SEND_TEXT:
+            //TODO : Put isExited in bodies
             return {
                 bodies: [
                     ...state.bodies, {
