@@ -12,6 +12,7 @@ import org.springframework.web.reactive.handler.SimpleUrlHandlerMapping;
 import org.springframework.web.reactive.socket.WebSocketHandler;
 import org.springframework.web.reactive.socket.server.support.WebSocketHandlerAdapter;
 
+import java.security.Key;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,6 +20,7 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 
 @SpringBootApplication
 public class MyChatServerApplication {
+    public static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     @Bean
     public RouterFunction<ServerResponse> routes(OpenAuthHandler openAuthHandler) {
@@ -30,9 +32,9 @@ public class MyChatServerApplication {
     }
 
     @Bean
-    public HandlerMapping webSocketMapping() {
+    public HandlerMapping webSocketMapping(ChatWebSocketHandler chatWebSocketHandler) {
         Map<String, WebSocketHandler> map = new HashMap<>();
-        map.put("/chat", new ChatWebSocketHandler());
+        map.put("/chat", chatWebSocketHandler);
 
         SimpleUrlHandlerMapping mapping = new SimpleUrlHandlerMapping();
         mapping.setUrlMap(map);
