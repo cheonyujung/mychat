@@ -72,7 +72,7 @@ public class OpenAuthHandler {
                 .flatMap(r -> r.bodyToMono(HashMap.class))
                 .map(t -> (String)t.get("access_token"))
                 .zipWhen(accessToken -> githubRest.get()
-                        .uri("https://api.github.com/?access_token={accessToken}", accessToken)
+                        .uri("/user?access_token={accessToken}", accessToken)
                         .exchange()
                         .flatMap(r -> r.bodyToMono(HashMap.class))
                         .flatMap(t1 -> {
@@ -80,6 +80,7 @@ public class OpenAuthHandler {
                             return userRepository.findByGithubId(id)
                                     .switchIfEmpty(userRepository.save(User.builder()
                                             .githubId(id)
+                                            .name((String)t1.get("login"))
                                             .build()));
                         })
                         .map(user -> Jwts.builder()

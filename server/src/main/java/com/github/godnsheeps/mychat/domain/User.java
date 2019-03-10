@@ -18,4 +18,6 @@ public class User {
 
     @Indexed
     private Long githubId;
+
+    private String name;
 }

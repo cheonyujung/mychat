@@ -1,7 +1,13 @@
 package com.github.godnsheeps.mychat;
 
+import com.github.godnsheeps.mychat.domain.Chat;
+import com.github.godnsheeps.mychat.domain.ChatRepository;
 import com.github.godnsheeps.mychat.web.handler.ChatWebSocketHandler;
 import com.github.godnsheeps.mychat.web.handler.OpenAuthHandler;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+import lombok.Getter;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +17,7 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import org.springframework.web.reactive.handler.SimpleUrlHandlerMapping;
 import org.springframework.web.reactive.socket.WebSocketHandler;
 import org.springframework.web.reactive.socket.server.support.WebSocketHandlerAdapter;
+import reactor.core.publisher.Mono;
 
 import java.security.Key;
 import java.util.HashMap;
@@ -19,8 +26,11 @@ import java.util.Map;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
 @SpringBootApplication
-public class MyChatServerApplication {
+public class MyChatServerApplication implements CommandLineRunner {
     public static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+
+    public static String rootChatId;
+    private ChatRepository chatRepository;
 
     @Bean
     public RouterFunction<ServerResponse> routes(OpenAuthHandler openAuthHandler) {
@@ -45,6 +55,16 @@ public class MyChatServerApplication {
     @Bean
     public WebSocketHandlerAdapter handlerAdapter() {
         return new WebSocketHandlerAdapter();
+    }
+
+    @Override
+    public void run(String... args) throws Exception {
+        rootChatId = chatRepository.findAll()
+                .singleOrEmpty()
+                .switchIfEmpty(Mono.defer(() -> chatRepository.save(new Chat())))
+                .blockOptional()
+                .orElseThrow()
+                .getId();
     }
 
     public static void main(String[] args) {
