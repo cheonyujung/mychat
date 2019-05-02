@@ -1,12 +1,11 @@
 import React from 'react';
-import JoinChatContainer from "../containers/JoinChatContainer";
-import ChatContainer from "../containers/ChatContainer";
-import Navbar from "./Navbar";
+
+import MainContainer from "../containers/MainContainer";
+import DrawerContainer from "../containers/DrawerContainer";
 
 export default () => (
     <div>
-        <Navbar/>
-        <JoinChatContainer/>
-        <ChatContainer/>
+        <MainContainer/>
+        <DrawerContainer/>
     </div>
 );

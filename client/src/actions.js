@@ -65,3 +65,19 @@ export function setGithub(gh) {
 export function getGithub() {
     return github;
 }
+
+export function openDrawer() {
+    return dispatch => {
+        dispatch({
+            type: at.OPEN_DRAWER,
+        });
+    };
+}
+
+export function closeDrawer() {
+    return dispatch => {
+        dispatch({
+            type: at.CLOSE_DRAWER,
+        });
+    };
+}
