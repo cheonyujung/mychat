@@ -1,5 +1,6 @@
 import axios from 'axios';
 import * as at from "./constants/ActionTypes";
+import _ from 'lodash';
 
 class NullSocket {
     send(message){
@@ -80,4 +81,18 @@ export function closeDrawer() {
             type: at.CLOSE_DRAWER,
         });
     };
+}
+
+export function openDialogForCreateChannel() {
+    return dispatch => {
+        axios.get("http://localhost:8080/users")
+            .then(t => {
+                dispatch({
+                    type: at.OPEN_DIALOG_CREATE_CHANNEL,
+                    payload: _.map(t.data, (user) => {
+                            return user.name;
+                        })
+                });
+            })
+    }
 }

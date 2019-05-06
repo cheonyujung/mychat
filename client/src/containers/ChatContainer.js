@@ -15,7 +15,6 @@ class ChatContainer extends React.Component {
 
     render() {
         const {profile} = this.props;
-
         if (profile) {
             return <Chat name={profile.login} handleSendText={::this.handleSendText} />;
         }

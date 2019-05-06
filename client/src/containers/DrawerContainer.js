@@ -1,21 +1,19 @@
 import React from 'react';
+import {bindActionCreators} from "redux";
 import {connect} from 'react-redux';
 
 import Drawer from "../components/Drawer";
+import {openDialogForCreateChannel} from "../actions";
 
 class DrawerContainer extends React.Component {
     clickCreateChannel(e) {
         e.preventDefault();
-        console.log("create Channel");
+        this.props.openDialogForCreateChannel();
     }
 
     render() {
-        return this.props.drawer.isOpen? <Drawer clickCreateChannel={::this.clickCreateChannel}/> : null;
+        return this.props.isOpen? <Drawer clickCreateChannel={::this.clickCreateChannel}/> : null;
     }
 }
 
-function mapToPropsState(state) {
-    return {"drawer": state.drawer};
-}
-
-export default connect(mapToPropsState)(DrawerContainer);
+export default connect(s => s.drawer, d => bindActionCreators({openDialogForCreateChannel}, d))(DrawerContainer);
