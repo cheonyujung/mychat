@@ -2,6 +2,7 @@ package com.github.godnsheeps.mychat;
 
 import com.github.godnsheeps.mychat.domain.Chat;
 import com.github.godnsheeps.mychat.domain.ChatRepository;
+import com.github.godnsheeps.mychat.web.handler.ChannelHandler;
 import com.github.godnsheeps.mychat.web.handler.ChatWebSocketHandler;
 import com.github.godnsheeps.mychat.web.handler.OpenAuthHandler;
 import com.github.godnsheeps.mychat.web.handler.UserHandler;
@@ -39,11 +40,14 @@ public class MyChatServerApplication implements CommandLineRunner {
     }
 
     @Bean
-    public RouterFunction<ServerResponse> routes(OpenAuthHandler openAuthHandler, UserHandler userHandler) {
+    public RouterFunction<ServerResponse> routes(OpenAuthHandler openAuthHandler, UserHandler userHandler, ChannelHandler channelHandler) {
         return route()
                 .GET("/", (req) -> ServerResponse.ok().render("index"))
 //                .GET("/users/{id}/chats", userHandler::getChatsByUser)
                 .GET("/oauth/github/access-token", openAuthHandler::getAccessTokenForGithub)
+                .GET("/users", userHandler::getUsers)
+                .POST("/channel", channelHandler::createChannel)
+                .GET("/channels", channelHandler::getChannels)
                 .build();
     }
 

@@ -8,6 +8,7 @@ class JoinChatContainer extends React.Component {
     render() {
         console.debug("Join Chat");
         const {profile} = this.props;
+        console.log(profile);
         if (profile)
             this.props.joinChat();
         return null;

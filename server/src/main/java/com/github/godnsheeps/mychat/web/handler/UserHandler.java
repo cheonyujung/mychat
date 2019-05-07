@@ -32,7 +32,13 @@ public class UserHandler {
                 });
     }
 
-//    public Mono<ServerResponse> getChatsByUser(ServerRequest req) {
-//        val id = req.pathVariable("id");
-//    }
+    public Mono<ServerResponse> getUsers(ServerRequest request) {
+        return userRepository.findAll()
+                .collectList()
+                .flatMap(users -> ServerResponse.ok().syncBody(users))
+                .switchIfEmpty(ServerResponse.notFound().build())
+                .onErrorResume(IllegalArgumentException.class, e -> {
+                    return ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).syncBody(e.getMessage());
+                });
+    }
 }

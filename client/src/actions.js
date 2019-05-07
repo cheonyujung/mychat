@@ -96,3 +96,42 @@ export function openDialogForCreateChannel() {
             })
     }
 }
+
+export function closeDialogForCreateChannel() {
+    return dispatch => {
+        dispatch({
+            type: at.CLOSE_DIALOG_CREATE_CHANNEL,
+        });
+    }
+}
+
+export function createChannel(name, users) {
+    return dispatch => {
+        axios.post("http://localhost:8080/channel", {name: name, users: users})
+            .then(t => {
+                axios.get("http://localhost:8080/channels")
+                    .then( t2 => {
+                        dispatch({
+                            type: at.CREATE_CHANNEL,
+                            payload: _.map(t2.data, (channel) => {
+                                return channel.name;
+                            })
+                        });
+                    })
+            })
+    }
+}
+
+export function getChannels() {
+    return dispatch => {
+        axios.get("http://localhost:8080/channels")
+            .then(t => {
+                dispatch({
+                    type: at.GET_CHANNELS,
+                    payload: _.map(t.data, (channel) => {
+                        return channel.name;
+                    })
+                });
+            });
+    };
+}
