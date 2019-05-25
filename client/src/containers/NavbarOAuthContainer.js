@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from "react-redux";
 import NavbarSignIn from "../components/NavbarSignIn";
 import NavbarSigned from "../components/NavbarSigned";
-import {getAuthenticated} from '../actions';
+import {getAuthenticated, getUserByGitHubId} from '../actions';
 import {bindActionCreators} from "redux";
 
 class NavbarOAuthContainer extends React.Component {
@@ -18,9 +18,10 @@ class NavbarOAuthContainer extends React.Component {
             return null;
         } else {
             console.debug(this.props.profile.avatar_url);
+            this.props.getUserByGitHubId(this.props.profile.id);
             return <NavbarSigned imgSrc={this.props.profile.avatar_url} handleSignOut={::this.handleSignOut}/>
         }
     }
 }
 
-export default connect(s => s.oauth, d => bindActionCreators({getAuthenticated}, d))(NavbarOAuthContainer);
+export default connect(s => s.oauth, d => bindActionCreators({getAuthenticated, getUserByGitHubId}, d))(NavbarOAuthContainer);

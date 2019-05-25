@@ -55,6 +55,16 @@ public class ChatWebSocketHandler implements WebSocketHandler {
         this.contentRepository = contentRepository;
     }
 
+    public Mono<Void> notifyChangedUserName(User user) {
+        return Mono.just(user)
+                .map(Functions.wrapError(objectMapper::writeValueAsString))
+                .flatMap(m -> {
+                    return Flux.fromStream(sessions.stream())
+                            .flatMap(s -> s.send(Mono.just(s.textMessage(m))))
+                            .then();
+                });
+    }
+
     @Override
     public Mono<Void> handle(WebSocketSession session) {
         sessions.add(session);
@@ -74,6 +84,7 @@ public class ChatWebSocketHandler implements WebSocketHandler {
                                 .collectList()
                                 .map(content ->
                                         ResponsePayload.builder()
+                                                .userId(message.getFrom().getId())
                                                 .username(message.getFrom().getName())
                                                 .contents(content)
                                                 .build())
@@ -136,6 +147,7 @@ public class ChatWebSocketHandler implements WebSocketHandler {
                                             .collectList()
                                             .map(content ->
                                                     ResponsePayload.builder()
+                                                    .userId(t.getFrom().getId())
                                                     .username(t.getFrom().getName())
                                                     .contents(content)
                                                     .build())
@@ -161,6 +173,7 @@ public class ChatWebSocketHandler implements WebSocketHandler {
     @Builder
     public static class ResponsePayload {
         String username;
+        String userId;
         List<ResponseContent> contents;
     }
 

@@ -5,7 +5,7 @@ import UserProfileContainer from "../containers/UserProfileContainer";
 
 export default ({body, showProfile}) => (
     <div style={{width: '100%', display: 'inline-block'}}>
-        <Popup trigger={<span style={{color: 'gray', fontSize: '0.8rem'}}>{body.id}</span>}
+        <Popup trigger={<span style={{color: 'gray', fontSize: '0.8rem'}}>{body.name}</span>}
                position="left center"
                onOpen={showProfile}>
             <UserProfileContainer/>

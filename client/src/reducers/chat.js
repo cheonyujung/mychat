@@ -10,7 +10,8 @@ export default function(state = defaultState, action) {
             return {
                 bodies: [
                     ...state.bodies, {
-                    id: action.payload.username,
+                    id: action.payload.userId,
+                    name: action.payload.username,
                     contents: action.payload.contents,
                 }]
             };

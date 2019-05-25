@@ -44,7 +44,9 @@ public class MyChatServerApplication implements CommandLineRunner {
                 .GET("/", (req) -> ServerResponse.ok().render("index"))
 //                .GET("/users/{id}/chats", userHandler::getChatsByUser)
                 .GET("/oauth/github/access-token", openAuthHandler::getAccessTokenForGithub)
-                .GET("/user", userHandler::getUser)
+                .GET("/user", userHandler::getUserByName)
+                .PUT("/user", userHandler::setUserName)
+                .GET("/user/githubId", userHandler::getUserByGitHubId)
                 .build();
     }
 

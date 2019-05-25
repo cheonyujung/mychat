@@ -22,6 +22,7 @@ export function joinChat() {
     return dispatch => {
         socket.onmessage = msg => {
             const payload = JSON.parse(msg.data);
+            console.log(payload);
             dispatch({
                 type: at.RECV_TEXT,
                 payload
@@ -35,7 +36,6 @@ export function getAccessTokenForGithub(code) {
         axios.get("http://localhost:8080/oauth/github/access-token", {params: {code}})
             .then(t => {
                 console.debug("Recive Access token");
-
                 mychatToken = t.data.token;
                 dispatch({
                     type: at.RECV_ACCESS_TOKEN,
@@ -72,6 +72,29 @@ export function getProfileByUser(name) {
             .then(t => {
                 dispatch({
                     type: at.RECV_USER_PROFILE,
+                    payload: t.data
+                })
+            })
+    }
+}
+export function getUserByGitHubId(id) {
+    return dispatch => {
+        axios.get("http://localhost:8080/user/githubId", {params: {id}})
+            .then(t => {
+                dispatch({
+                    type: at.RECV_MY_INFO,
+                    payload: t.data
+                })
+            })
+    }
+}
+
+export function setUserName(name, newName) {
+    return dispatch => {
+        axios.put("http://localhost:8080/user", {name, newName})
+            .then(t => {
+                dispatch({
+                    type: at.MODIFY_MY_NAME,
                     payload: t.data
                 })
             })

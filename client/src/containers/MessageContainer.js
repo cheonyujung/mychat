@@ -17,9 +17,11 @@ class MessageContainer extends React.Component {
     }
 
     render() {
-        const {chat, oauth} = this.props;
+        const {chat, user} = this.props;
         return _.map(chat.bodies, (v) => {
-            if (v.id == oauth.profile.login)
+            if (user.myProfile === undefined)
+                return null;
+            else if (v.id == user.myProfile.id)
                 return <MyMessage body={v}/>;
             else
                 return <OtherMessage body={v} showProfile={::this.showProfile}/>;
@@ -27,8 +29,8 @@ class MessageContainer extends React.Component {
     }
 }
 
-function mapToPropsState({chat, oauth}) {
-    return {chat, oauth};
+function mapToPropsState({chat, user}) {
+    return {chat, user};
 }
 
 export default connect(mapToPropsState, d => bindActionCreators({getProfileByUser}, d))(MessageContainer);
