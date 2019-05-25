@@ -18,7 +18,7 @@ class NavbarOAuthContainer extends React.Component {
             return null;
         } else {
             console.debug(this.props.profile.avatar_url);
-            return <NavbarSigned imgSrc={this.props.profile.avatar_url} handleSignOut={::this.handleSignOut} />
+            return <NavbarSigned imgSrc={this.props.profile.avatar_url} handleSignOut={::this.handleSignOut}/>
         }
     }
 }
