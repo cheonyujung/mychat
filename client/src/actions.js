@@ -65,3 +65,15 @@ export function setGithub(gh) {
 export function getGithub() {
     return github;
 }
+
+export function getProfileByUser(name) {
+    return dispatch => {
+        axios.get("http://localhost:8080/user", {params: {name}})
+            .then(t => {
+                dispatch({
+                    type: at.RECV_USER_PROFILE,
+                    payload: t.data
+                })
+            })
+    }
+}

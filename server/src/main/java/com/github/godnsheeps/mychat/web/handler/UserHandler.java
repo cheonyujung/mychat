@@ -2,6 +2,7 @@ package com.github.godnsheeps.mychat.web.handler;
 
 import com.github.godnsheeps.mychat.domain.MessageRepository;
 import com.github.godnsheeps.mychat.domain.UserRepository;
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -22,9 +23,9 @@ public class UserHandler {
     }
 
     public Mono<ServerResponse> getUser(ServerRequest request) {
-        var id = request.pathVariable("id");
+        val name = request.queryParam("name").orElseThrow();
 
-        return userRepository.findById(id)
+        return userRepository.findByName(name)
                 .flatMap(user -> ServerResponse.ok().syncBody(user))
                 .switchIfEmpty(ServerResponse.notFound().build())
                 .onErrorResume(IllegalArgumentException.class, e -> {

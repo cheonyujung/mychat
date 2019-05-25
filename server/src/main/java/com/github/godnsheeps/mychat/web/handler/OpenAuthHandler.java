@@ -72,6 +72,7 @@ public class OpenAuthHandler {
                                     .switchIfEmpty(userRepository.save(User.builder()
                                             .githubId(id)
                                             .name((String)t1.get("login"))
+                                            .email((String)t1.get("email"))
                                             .avatarUrl((String)t1.get("avatar_url"))
                                             .build()));
                         })
